@@ -25,7 +25,7 @@ export const MissionPassedModal: React.FC<MissionPassedModalProps> = ({
             MISSION PASSED
           </h1>
           <p className="font-gta text-2xl text-white tracking-wide">{mission.title}</p>
-          <p className="font-romance text-sm text-rose-300 italic">"Ride or Die in Los Santos"</p>
+          <p className="font-romance text-sm text-rose-300 italic">"Ride or Die in Dhaka"</p>
         </div>
 
         {/* Rewards Breakdown */}
@@ -34,10 +34,10 @@ export const MissionPassedModal: React.FC<MissionPassedModalProps> = ({
           <div className="bg-zinc-900/90 p-4 rounded-xl border border-emerald-500/40">
             <div className="flex items-center justify-center gap-1 text-xs text-zinc-400 uppercase tracking-wider mb-1 font-bold">
               <DollarSign className="w-4 h-4 text-emerald-400" />
-              Cash Earned
+              Cash Earned (টাকা)
             </div>
             <div className="font-gta text-3xl text-emerald-400 tabular-nums">
-              +${mission.rewardCash.toLocaleString()}
+              +৳ {mission.rewardCash.toLocaleString()}
             </div>
           </div>
 
@@ -55,7 +55,7 @@ export const MissionPassedModal: React.FC<MissionPassedModalProps> = ({
 
         {/* Current Total Stats */}
         <div className="p-3 rounded-lg bg-zinc-900/60 border border-zinc-800 text-xs flex justify-between text-zinc-300 font-mono">
-          <span>Total Vault: ${stats.cash.toLocaleString()}</span>
+          <span>Total Vault: ৳ {stats.cash.toLocaleString()} BDT</span>
           <span>Status: {stats.loveTitle}</span>
         </div>
 

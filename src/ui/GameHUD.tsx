@@ -59,6 +59,20 @@ export const GameHUD: React.FC<GameHUDProps> = ({
       ctx.stroke();
     });
 
+    // Hatirjheel Central Lake on Minimap Radar
+    const lakeScreenX = (0 - minimapData.playerPos.x) * scale;
+    const lakeScreenZ = (15 - minimapData.playerPos.z) * scale;
+    ctx.fillStyle = '#0369a1';
+    ctx.fillRect(lakeScreenX - 44 * scale, lakeScreenZ - 95 * scale, 88 * scale, 190 * scale);
+
+    // Hatirjheel Cable Bridge line
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(lakeScreenX - 50 * scale, lakeScreenZ - 8 * scale);
+    ctx.lineTo(lakeScreenX + 50 * scale, lakeScreenZ - 8 * scale);
+    ctx.stroke();
+
     [-140, -70, 0, 70, 140].forEach((x) => {
       const screenX = (x - minimapData.playerPos.x) * scale;
       ctx.beginPath();
@@ -150,6 +164,12 @@ export const GameHUD: React.FC<GameHUDProps> = ({
               style={{ width: `${stats.loveMeter}%` }}
             />
           </div>
+        </div>
+
+        {/* Center Top: Discreet Bangladeshi Taka Heist Cache */}
+        <div className="font-gta text-lg md:text-xl text-emerald-400 tracking-wider tabular-nums drop-shadow-[0_0_10px_rgba(52,211,153,0.4)] flex items-center gap-1">
+          <span className="text-sm text-emerald-500 font-sans font-bold">BDT</span>
+          <span>৳ {stats.cash.toLocaleString()}</span>
         </div>
 
         {/* Top-Right: 5 Golden Wanted Stars (Pure Graphical) */}

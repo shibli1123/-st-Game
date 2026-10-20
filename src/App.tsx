@@ -204,6 +204,13 @@ export default function App() {
     }
   };
 
+  // Set Custom GPS Waypoint from Dhaka Google Maps
+  const handleSetWaypoint = (x: number, z: number, label: string) => {
+    if (engineRef.current) {
+      engineRef.current.setCustomWaypoint(x, z, label);
+    }
+  };
+
   return (
     <div
       onClick={handleUserGestureAudio}
@@ -245,13 +252,14 @@ export default function App() {
             onCycleWeather={handleCycleWeather}
           />
 
-          {/* iFruit Smartphone */}
+          {/* iFruit Smartphone with Dhaka Google Maps Grounding */}
           <Smartphone
             stats={stats}
             isOpen={isPhoneOpen}
             onClose={() => setIsPhoneOpen(false)}
             onSelectRadio={handleSelectRadio}
             currentRadioIdx={currentRadioIdx}
+            onSetWaypoint={handleSetWaypoint}
           />
         </>
       )}

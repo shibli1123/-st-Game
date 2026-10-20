@@ -483,6 +483,22 @@ export class GameEngine {
     this.updateMissionTarget();
   }
 
+  public setCustomWaypoint(x: number, z: number, label?: string) {
+    this.missionTargetPos = new THREE.Vector3(x, 0, z);
+    if (this.objectiveBeacon) {
+      this.objectiveBeacon.position.set(x, 0, z);
+      this.objectiveBeacon.visible = true;
+    }
+    soundEngine.playCash();
+    this.callbacks.onDialogue({
+      id: 'gps-' + Date.now(),
+      speaker: 'Mia',
+      text: `Dhaka GPS waypoint set for ${label || 'target'}! Follow the 3D beacon.`,
+      duration: 3.5,
+      color: '#06b6d4',
+    });
+  }
+
   private updateMissionTarget() {
     if (!this.currentMission) {
       this.missionTargetPos = null;

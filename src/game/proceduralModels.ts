@@ -810,3 +810,502 @@ export function createStreetLight(): THREE.Group {
   lightGroup.add(pole, arm, lampHead, bulb, downLight);
   return lightGroup;
 }
+
+// -------------------------------------------------------------
+// DHAKA, BANGLADESH PROCEDURAL 3D ASSETS
+// -------------------------------------------------------------
+
+/**
+ * Iconic Dhaka Green CNG Auto-Rickshaw (সিএনজি অটো-রিকশা)
+ */
+export function createCNGAutoRickshaw(): THREE.Group {
+  const cng = new THREE.Group();
+
+  // Green metallic body
+  const greenPaintMat = new THREE.MeshPhysicalMaterial({
+    color: 0x059669,
+    metalness: 0.65,
+    roughness: 0.25,
+    clearcoat: 0.5,
+  });
+
+  const blackRubberMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.85 });
+  const chromeMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.9, roughness: 0.1 });
+  const yellowCageMat = new THREE.MeshStandardMaterial({ color: 0xeab308, metalness: 0.4, roughness: 0.4 });
+  const glassMat = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.45,
+    roughness: 0.1,
+    transmission: 0.6,
+  });
+
+  // Lower chassis
+  const chassis = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.45, 2.7), greenPaintMat);
+  chassis.position.y = 0.5;
+  chassis.castShadow = true;
+  cng.add(chassis);
+
+  // Cabin enclosure with side door openings
+  const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.36, 1.1, 1.6), greenPaintMat);
+  cabin.position.set(0, 1.25, -0.2);
+  cabin.castShadow = true;
+  cng.add(cabin);
+
+  // Roof curved canopy (Yellow/Green)
+  const roof = new THREE.Mesh(
+    new THREE.BoxGeometry(1.42, 0.12, 2.2),
+    new THREE.MeshStandardMaterial({ color: 0x047857, roughness: 0.5 })
+  );
+  roof.position.set(0, 1.82, -0.1);
+  cng.add(roof);
+
+  // Safety Grille / Iron Mesh Bars (defining feature of Dhaka CNGs)
+  for (let z = -0.8; z <= 0.5; z += 0.3) {
+    const barL = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.9, 6), yellowCageMat);
+    barL.position.set(-0.69, 1.25, z);
+    const barR = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.9, 6), yellowCageMat);
+    barR.position.set(0.69, 1.25, z);
+    cng.add(barL, barR);
+  }
+
+  // Front Windshield
+  const windshield = new THREE.Mesh(new THREE.PlaneGeometry(1.15, 0.65), glassMat);
+  windshield.position.set(0, 1.25, 0.92);
+  cng.add(windshield);
+
+  // Front nose hood (tapered)
+  const frontHood = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.5, 0.7), greenPaintMat);
+  frontHood.position.set(0, 0.7, 1.05);
+  frontHood.castShadow = true;
+  cng.add(frontHood);
+
+  // Single front wheel
+  const frontWheel = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.18, 16), blackRubberMat);
+  frontWheel.rotation.z = Math.PI / 2;
+  frontWheel.position.set(0, 0.3, 1.05);
+  frontWheel.castShadow = true;
+  cng.add(frontWheel);
+
+  // Dual rear wheels
+  const rearWheelL = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.2, 16), blackRubberMat);
+  rearWheelL.rotation.z = Math.PI / 2;
+  rearWheelL.position.set(-0.7, 0.32, -0.75);
+  rearWheelL.castShadow = true;
+
+  const rearWheelR = rearWheelL.clone();
+  rearWheelR.position.x = 0.7;
+  cng.add(rearWheelL, rearWheelR);
+
+  // Headlight (round central halogen)
+  const headlight = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.12, 0.12, 0.06, 12),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xfef08a, emissiveIntensity: 2.0 })
+  );
+  headlight.rotation.x = Math.PI / 2;
+  headlight.position.set(0, 0.75, 1.42);
+  cng.add(headlight);
+
+  // Rear Taillights
+  const tailL = new THREE.Mesh(
+    new THREE.BoxGeometry(0.14, 0.1, 0.04),
+    new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0xef4444, emissiveIntensity: 1.5 })
+  );
+  tailL.position.set(-0.55, 0.7, -1.36);
+  const tailR = tailL.clone();
+  tailR.position.x = 0.55;
+  cng.add(tailL, tailR);
+
+  // Dhaka Number Plate (ঢাকা মেট্রো-থ)
+  const plateCanvas = document.createElement('canvas');
+  plateCanvas.width = 128;
+  plateCanvas.height = 48;
+  const pCtx = plateCanvas.getContext('2d')!;
+  pCtx.fillStyle = '#065f46';
+  pCtx.fillRect(0, 0, 128, 48);
+  pCtx.strokeStyle = '#ffffff';
+  pCtx.lineWidth = 2;
+  pCtx.strokeRect(2, 2, 124, 44);
+  pCtx.fillStyle = '#ffffff';
+  pCtx.font = 'bold 15px sans-serif';
+  pCtx.textAlign = 'center';
+  pCtx.fillText('ঢাকা মেট্রো-থ', 64, 20);
+  pCtx.fillText('১১-৪২০', 64, 40);
+
+  const plateTex = new THREE.CanvasTexture(plateCanvas);
+  const plate = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.48, 0.18),
+    new THREE.MeshBasicMaterial({ map: plateTex })
+  );
+  plate.rotation.y = Math.PI;
+  plate.position.set(0, 0.5, -1.37);
+  cng.add(plate);
+
+  return cng;
+}
+
+/**
+ * Traditional Dhaka Cycle Rickshaw with ornate art
+ */
+export function createDhakaRickshaw(): THREE.Group {
+  const rickshaw = new THREE.Group();
+
+  const chromeMat = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.9, roughness: 0.1 });
+  const wheelMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.7 });
+  const seatMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.5 }); // Red velvet seat
+
+  // Rickshaw hood art canvas texture
+  const hoodCanvas = document.createElement('canvas');
+  hoodCanvas.width = 256;
+  hoodCanvas.height = 256;
+  const hCtx = hoodCanvas.getContext('2d')!;
+  // Vibrant floral/film decorative pattern
+  hCtx.fillStyle = '#f59e0b';
+  hCtx.fillRect(0, 0, 256, 256);
+  hCtx.fillStyle = '#ef4444';
+  hCtx.beginPath();
+  hCtx.arc(128, 128, 80, 0, Math.PI * 2);
+  hCtx.fill();
+  hCtx.fillStyle = '#10b981';
+  hCtx.beginPath();
+  hCtx.arc(128, 128, 50, 0, Math.PI * 2);
+  hCtx.fill();
+  hCtx.fillStyle = '#ffffff';
+  hCtx.font = 'bold 24px sans-serif';
+  hCtx.textAlign = 'center';
+  hCtx.fillText('ঢাকা রিকশা', 128, 135);
+
+  const hoodTex = new THREE.CanvasTexture(hoodCanvas);
+  const hoodMat = new THREE.MeshStandardMaterial({ map: hoodTex, roughness: 0.6 });
+
+  // Rear passenger seat
+  const seat = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.45, 0.6), seatMat);
+  seat.position.set(0, 0.95, -0.3);
+  seat.castShadow = true;
+
+  // Folding canopy hood
+  const hood = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.55, 0.55, 1.05, 12, 1, false, 0, Math.PI),
+    hoodMat
+  );
+  hood.rotation.z = Math.PI / 2;
+  hood.rotation.y = Math.PI / 2;
+  hood.position.set(0, 1.4, -0.3);
+  hood.castShadow = true;
+
+  // Frame chassis
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.08, 1.8), chromeMat);
+  frame.position.set(0, 0.55, 0.2);
+
+  // Large thin spoke rear wheels
+  const rearWheelGeo = new THREE.TorusGeometry(0.48, 0.035, 8, 24);
+  const rearWheelL = new THREE.Mesh(rearWheelGeo, wheelMat);
+  rearWheelL.position.set(-0.55, 0.48, -0.35);
+  rearWheelL.castShadow = true;
+
+  const rearWheelR = rearWheelL.clone();
+  rearWheelR.position.x = 0.55;
+
+  // Bicycle front wheel
+  const frontWheel = new THREE.Mesh(rearWheelGeo, wheelMat);
+  frontWheel.position.set(0, 0.48, 1.25);
+  frontWheel.castShadow = true;
+
+  // Handlebar
+  const handlebar = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.65, 8), chromeMat);
+  handlebar.rotation.z = Math.PI / 2;
+  handlebar.position.set(0, 1.15, 1.1);
+
+  rickshaw.add(seat, hood, frame, rearWheelL, rearWheelR, frontWheel, handlebar);
+  return rickshaw;
+}
+
+/**
+ * Dhaka Bilingual Highway Gantry Sign
+ */
+export function createDhakaSignage(titleBangla: string, titleEnglish: string): THREE.Group {
+  const gantry = new THREE.Group();
+
+  const steelMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8, roughness: 0.3 });
+
+  // Twin vertical truss columns
+  const colL = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 9, 8), steelMat);
+  colL.position.set(-8, 4.5, 0);
+  colL.castShadow = true;
+
+  const colR = colL.clone();
+  colR.position.x = 8;
+
+  // Cross beam
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(17, 0.4, 0.4), steelMat);
+  beam.position.set(0, 8.8, 0);
+
+  // Green Highway Sign Board
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d')!;
+
+  ctx.fillStyle = '#065f46'; // Official Bangladesh highway green
+  ctx.fillRect(0, 0, 1024, 256);
+
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 10;
+  ctx.strokeRect(12, 12, 1000, 232);
+
+  // Bangla Title
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 72px "Outfit", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(titleBangla, 512, 105);
+
+  // English Title
+  ctx.fillStyle = '#fef08a'; // Yellow accent for english
+  ctx.font = 'bold 54px "Bebas Neue", sans-serif';
+  ctx.fillText(titleEnglish, 512, 185);
+
+  const signTex = new THREE.CanvasTexture(canvas);
+  const signMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(14, 3.5),
+    new THREE.MeshStandardMaterial({
+      map: signTex,
+      roughness: 0.4,
+      metalness: 0.1,
+    })
+  );
+  signMesh.position.set(0, 7.0, 0.25);
+  signMesh.castShadow = true;
+
+  // Downward illumination lights
+  const lampL = new THREE.SpotLight(0xffffff, 1.5, 12, Math.PI / 4, 0.3);
+  lampL.position.set(-4, 8.5, 1.2);
+  const targetL = new THREE.Object3D();
+  targetL.position.set(-4, 5, 0);
+  gantry.add(targetL);
+  lampL.target = targetL;
+
+  const lampR = lampL.clone();
+  lampR.position.x = 4;
+  const targetR = new THREE.Object3D();
+  targetR.position.set(4, 5, 0);
+  gantry.add(targetR);
+  lampR.target = targetR;
+
+  gantry.add(colL, colR, beam, signMesh, lampL, lampR);
+  return gantry;
+}
+
+/**
+ * Shapla Chattar (National Flower Water Lily) Monument for Motijheel Financial District
+ */
+export function createShaplaSculpture(): THREE.Group {
+  const shaplaGroup = new THREE.Group();
+
+  // Circular granite water fountain basin
+  const basin = new THREE.Mesh(
+    new THREE.CylinderGeometry(14, 15, 2.5, 32),
+    new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.6 })
+  );
+  basin.position.y = 1.25;
+  basin.receiveShadow = true;
+  shaplaGroup.add(basin);
+
+  // Water pool
+  const poolWater = new THREE.Mesh(
+    new THREE.CylinderGeometry(13.5, 13.5, 0.2, 32),
+    new THREE.MeshPhysicalMaterial({
+      color: 0x0284c7,
+      roughness: 0.1,
+      metalness: 0.2,
+      transmission: 0.7,
+      transparent: true,
+      opacity: 0.85,
+    })
+  );
+  poolWater.position.y = 2.4;
+  shaplaGroup.add(poolWater);
+
+  // Central pedestal
+  const pedestal = new THREE.Mesh(
+    new THREE.CylinderGeometry(2.5, 3.2, 5, 16),
+    new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.1 })
+  );
+  pedestal.position.y = 4.5;
+  shaplaGroup.add(pedestal);
+
+  // White Water Lily (Shapla) Petals opening upwards
+  const petalMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 0.2,
+    metalness: 0.1,
+    side: THREE.DoubleSide,
+  });
+
+  const petalCount = 8;
+  for (let i = 0; i < petalCount; i++) {
+    const angle = (i / petalCount) * Math.PI * 2;
+    const petal = new THREE.Mesh(new THREE.ConeGeometry(1.6, 9, 8), petalMat);
+    petal.position.set(Math.cos(angle) * 1.8, 9.5, Math.sin(angle) * 1.8);
+    petal.rotation.x = Math.sin(angle) * 0.45;
+    petal.rotation.z = -Math.cos(angle) * 0.45;
+    petal.castShadow = true;
+    shaplaGroup.add(petal);
+  }
+
+  // Inner golden carpel
+  const innerCore = new THREE.Mesh(
+    new THREE.SphereGeometry(1.4, 16, 16),
+    new THREE.MeshStandardMaterial({ color: 0xfacc15, emissive: 0xeab308, emissiveIntensity: 0.8 })
+  );
+  innerCore.position.y = 8.5;
+  shaplaGroup.add(innerCore);
+
+  return shaplaGroup;
+}
+
+/**
+ * Lalbagh Fort (লালবাগ কেল্লা) Tomb of Pari Bibi Architectural Landmark
+ */
+export function createLalbaghFortTomb(): THREE.Group {
+  const fortGroup = new THREE.Group();
+
+  // Mughal red terracotta brick & white marble materials
+  const brickMat = new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.85 }); // Terracotta red
+  const marbleMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.35, metalness: 0.1 });
+  const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.85, roughness: 0.2 });
+
+  // Main square tomb chamber
+  const chamber = new THREE.Mesh(new THREE.BoxGeometry(32, 11, 32), brickMat);
+  chamber.position.y = 5.5;
+  chamber.castShadow = true;
+  chamber.receiveShadow = true;
+
+  // Four corner octagonal minarets
+  const cornerOffsets = [
+    [-15, -15],
+    [15, -15],
+    [-15, 15],
+    [15, 15],
+  ];
+
+  cornerOffsets.forEach(([cx, cz]) => {
+    const minaret = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.6, 15, 8), brickMat);
+    minaret.position.set(cx, 7.5, cz);
+    minaret.castShadow = true;
+
+    // Cupola top
+    const cupola = new THREE.Mesh(new THREE.SphereGeometry(1.5, 12, 12, 0, Math.PI * 2, 0, Math.PI / 2), marbleMat);
+    cupola.position.set(cx, 15, cz);
+
+    const finial = new THREE.Mesh(new THREE.ConeGeometry(0.3, 1.8, 6), brassMat);
+    finial.position.set(cx, 16.5, cz);
+
+    fortGroup.add(minaret, cupola, finial);
+  });
+
+  // Central grand white marble dome
+  const centralDome = new THREE.Mesh(
+    new THREE.SphereGeometry(7.5, 24, 20, 0, Math.PI * 2, 0, Math.PI / 2),
+    marbleMat
+  );
+  centralDome.position.y = 11;
+  centralDome.castShadow = true;
+
+  const domeFinial = new THREE.Mesh(new THREE.ConeGeometry(0.8, 4.0, 8), brassMat);
+  domeFinial.position.y = 19.5;
+  centralDome.add(domeFinial);
+
+  // Mughal Arched Iwan Gateways
+  const archCanvas = document.createElement('canvas');
+  archCanvas.width = 256;
+  archCanvas.height = 256;
+  const aCtx = archCanvas.getContext('2d')!;
+  aCtx.fillStyle = '#f8fafc';
+  aCtx.fillRect(0, 0, 256, 256);
+  aCtx.fillStyle = '#18181b';
+  // Cusped Mughal arch
+  aCtx.beginPath();
+  aCtx.arc(128, 128, 90, Math.PI, 0);
+  aCtx.rect(38, 128, 180, 128);
+  aCtx.fill();
+
+  const archTex = new THREE.CanvasTexture(archCanvas);
+  const archMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(10, 8),
+    new THREE.MeshStandardMaterial({ map: archTex, roughness: 0.5 })
+  );
+  archMesh.position.set(0, 5, 16.1);
+
+  fortGroup.add(chamber, centralDome, archMesh);
+  return fortGroup;
+}
+
+/**
+ * Hatirjheel Arched Cable-Stayed Bridge (হাতিরঝিল ব্রিজ)
+ */
+export function createHatirjheelBridge(length: number = 90): THREE.Group {
+  const bridge = new THREE.Group();
+
+  const steelMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.25 });
+  const neonCyanMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 });
+
+  // Main road deck
+  const deck = new THREE.Mesh(
+    new THREE.BoxGeometry(16, 1.2, length),
+    new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.7 })
+  );
+  deck.position.y = 3.5;
+  deck.receiveShadow = true;
+  bridge.add(deck);
+
+  // Glowing white pedestrian curbs
+  const curbL = new THREE.Mesh(
+    new THREE.BoxGeometry(1.2, 0.4, length),
+    new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.4 })
+  );
+  curbL.position.set(-7.5, 4.2, 0);
+  const curbR = curbL.clone();
+  curbR.position.x = 7.5;
+  bridge.add(curbL, curbR);
+
+  // Twin iconic sweeping arches (Cable-stayed)
+  const archPoints: THREE.Vector3[] = [];
+  const segments = 24;
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const z = (t - 0.5) * length;
+    const y = 3.5 + Math.sin(t * Math.PI) * 16;
+    archPoints.push(new THREE.Vector3(0, y, z));
+  }
+
+  const archCurve = new THREE.CatmullRomCurve3(archPoints);
+  const archGeo = new THREE.TubeGeometry(archCurve, 32, 0.45, 8, false);
+
+  const archLeft = new THREE.Mesh(archGeo, steelMat);
+  archLeft.position.x = -8.2;
+  archLeft.castShadow = true;
+
+  const archRight = new THREE.Mesh(archGeo, steelMat);
+  archRight.position.x = 8.2;
+  archRight.castShadow = true;
+
+  bridge.add(archLeft, archRight);
+
+  // Illuminated LED stay cables (Neon Cyan)
+  for (let z = -length * 0.4; z <= length * 0.4; z += 6) {
+    const t = (z + length * 0.5) / length;
+    const archY = 3.5 + Math.sin(t * Math.PI) * 16;
+
+    const cableGeo = new THREE.CylinderGeometry(0.04, 0.04, archY - 3.5, 4);
+
+    const cableL = new THREE.Mesh(cableGeo, neonCyanMat);
+    cableL.position.set(-8.2, (archY + 3.5) / 2, z);
+
+    const cableR = new THREE.Mesh(cableGeo, neonCyanMat);
+    cableR.position.set(8.2, (archY + 3.5) / 2, z);
+
+    bridge.add(cableL, cableR);
+  }
+
+  return bridge;
+}
