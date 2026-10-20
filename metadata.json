@@ -1,0 +1,6 @@
+{
+  "name": "Grand Theft Valentine: A Los Santos Love Story",
+  "description": "An interactive 3D action-adventure romance game in the spirit of GTA V. Cruise neon sunset streets, pull off daring heists, evade 5-star police chases, and protect your criminal soulmate across Los Santos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
